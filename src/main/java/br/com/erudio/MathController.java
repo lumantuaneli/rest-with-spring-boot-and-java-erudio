@@ -23,22 +23,22 @@ public class MathController {
 		return convertToDouble(pLeftOperand) + convertToDouble(pRightOperand);
 	}
 	
-	@GetMapping("/subtract/{leftOperand}/{rightOperand}")
-	public Double subtract(@PathVariable(value = "leftOperand") String pLeftOperand, @PathVariable(value = "rightOperand") String pRightOperand) {
+	@GetMapping("/subtraction/{leftOperand}/{rightOperand}")
+	public Double subtraction(@PathVariable(value = "leftOperand") String pLeftOperand, @PathVariable(value = "rightOperand") String pRightOperand) {
 		validateNumbers(pLeftOperand, pRightOperand);
 		
 		return convertToDouble(pLeftOperand) - convertToDouble(pRightOperand);
 	}
 	
-	@GetMapping("/multiply/{leftOperand}/{rightOperand}")
-	public Double multiply(@PathVariable(value = "leftOperand") String pLeftOperand, @PathVariable(value = "rightOperand") String pRightOperand) {
+	@GetMapping("/multiplication/{leftOperand}/{rightOperand}")
+	public Double multiplication(@PathVariable(value = "leftOperand") String pLeftOperand, @PathVariable(value = "rightOperand") String pRightOperand) {
 		validateNumbers(pLeftOperand, pRightOperand);
 		
 		return convertToDouble(pLeftOperand) * convertToDouble(pRightOperand);
 	}
 	
-	@GetMapping("/divide/{leftOperand}/{rightOperand}")
-	public Double divide(@PathVariable(value = "leftOperand") String pLeftOperand, @PathVariable(value = "rightOperand") String pRightOperand) {
+	@GetMapping("/division/{leftOperand}/{rightOperand}")
+	public Double division(@PathVariable(value = "leftOperand") String pLeftOperand, @PathVariable(value = "rightOperand") String pRightOperand) {
 		validateNumbers(pLeftOperand, pRightOperand);
 		
 		Double vRightOperand = convertToDouble(pRightOperand);
