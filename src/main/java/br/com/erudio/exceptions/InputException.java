@@ -4,29 +4,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class UnsupportedMathOperationException extends RuntimeException {
+public class InputException extends RuntimeException {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    public UnsupportedMathOperationException() {
+    public InputException() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    public UnsupportedMathOperationException(String message, Throwable cause) {
+    public InputException(String message, Throwable cause) {
         super(message, cause);
         // TODO Auto-generated constructor stub
     }
 
-    public UnsupportedMathOperationException(String message) {
+    public InputException(String message) {
         super(message);
         // TODO Auto-generated constructor stub
     }
 
-    public UnsupportedMathOperationException(Throwable cause) {
+    public InputException(Throwable cause) {
         super(cause);
         // TODO Auto-generated constructor stub
     }
