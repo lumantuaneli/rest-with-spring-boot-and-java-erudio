@@ -1,4 +1,4 @@
-package br.com.erudio.service;
+package br.com.erudio.services;
 
 public interface MathService {
 

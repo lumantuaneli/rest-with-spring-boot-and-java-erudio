@@ -1,4 +1,4 @@
-package br.com.erudio.validation;
+package br.com.erudio.validators;
 
 public class NumericValidatorTest {
     public static void main(String[] args) {

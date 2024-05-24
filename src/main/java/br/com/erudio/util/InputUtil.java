@@ -1,7 +1,7 @@
 package br.com.erudio.util;
 
 import br.com.erudio.exceptions.InputException;
-import br.com.erudio.validation.NumericValidator;
+import br.com.erudio.validators.NumericValidator;
 
 public class InputUtil {
 

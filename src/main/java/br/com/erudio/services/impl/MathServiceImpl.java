@@ -1,9 +1,9 @@
-package br.com.erudio.service.impl;
+package br.com.erudio.services.impl;
 
 import org.springframework.stereotype.Service;
 
 import br.com.erudio.exceptions.UnsupportedMathOperationException;
-import br.com.erudio.service.MathService;
+import br.com.erudio.services.MathService;
 
 @Service
 public class MathServiceImpl implements MathService {

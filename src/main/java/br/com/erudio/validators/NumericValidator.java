@@ -1,4 +1,4 @@
-package br.com.erudio.validation;
+package br.com.erudio.validators;
 
 import br.com.erudio.exceptions.MathValidationException;
 
