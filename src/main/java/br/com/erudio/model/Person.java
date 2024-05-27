@@ -3,6 +3,9 @@ package br.com.erudio.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -97,4 +100,8 @@ public class Person implements Serializable {
             && Objects.equals(lastName, other.lastName);
     }
     
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+    }
 }

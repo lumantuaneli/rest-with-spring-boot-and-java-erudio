@@ -26,7 +26,7 @@ public class PersonController {
     private PersonServiceImpl personService;
     
     @GetMapping(value = {"/{id}", "/{id}/"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person findById(@PathVariable(value = "id") String pId) {
+    public Person findById(@PathVariable(value = "id") Long pId) {
         return personService.findById(pId);
     }
     
@@ -47,13 +47,13 @@ public class PersonController {
     }
     
     @PutMapping(value = {"/{id}", "/{id}/"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person update(@PathVariable("id") String pId, @RequestBody Person pUpdatedPersonData) {
+    public Person update(@PathVariable("id") Long pId, @RequestBody Person pUpdatedPersonData) {
         return personService.update(pId, pUpdatedPersonData);
     }
     
     @DeleteMapping(value = {"/{id}", "/{id}/"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Person delete(@PathVariable("id") String pId) {
+    public Person delete(@PathVariable("id") Long pId) {
         return personService.delete(pId);
     }
 }
