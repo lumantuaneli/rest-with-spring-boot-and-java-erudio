@@ -3,16 +3,15 @@ spring:
     name: rest-with-spring-boot-and-java-erudio
 
   datasource:
-    dbcp2:
-      driver-class-name: com.mysql.cj.jdbc.driver
-      url: jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?useTimezone=true&serverTimezone=UTC
-      username: root
-      password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?useTimezone=true&serverTimezone=UTC
+    username: root
+    password: root
       
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySql8Dialect
-      show-sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
