@@ -11,6 +11,10 @@ public class PersonMapper {
         throw new UnsupportedOperationException();
     }
 
+    /*
+     * V1
+     */
+    
     public static Person toEntity(PersonVO pPersonVo) {
         return DozerMapper.parseObject(pPersonVo, Person.class);
     }

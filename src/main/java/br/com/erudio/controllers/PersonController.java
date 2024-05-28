@@ -42,6 +42,12 @@ public class PersonController {
         return personService.create(pNewPerson);
     }
     
+    @PostMapping(value = {"/v2", "/v2/"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public br.com.erudio.data.vo.v2.PersonVO create(@RequestBody br.com.erudio.data.vo.v2.PersonVO pNewPerson) {
+        return personService.create(pNewPerson);
+    }
+    
     @PutMapping(value = {"", "/"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonVO update(@RequestBody PersonVO pUpdatedPersonData) {
         return personService.update(pUpdatedPersonData);

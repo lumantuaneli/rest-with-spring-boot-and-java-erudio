@@ -19,6 +19,9 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     private PersonRepository personRepository;
     
+    @Autowired
+    private br.com.erudio.mapper.custom.PersonMapper personMapper;
+    
     private Logger logger = Logger.getLogger(PersonServiceImpl.class.getName());
     
     /**
@@ -50,6 +53,17 @@ public class PersonServiceImpl implements PersonService {
         Person vPerson = PersonMapper.toEntity(pPersonVo);
         vPerson = personRepository.save(vPerson);
         return PersonMapper.toVo(vPerson);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public br.com.erudio.data.vo.v2.PersonVO create(br.com.erudio.data.vo.v2.PersonVO pPersonVo) {
+        logger.info(String.format("[V2]Creating the person \"%s\"", pPersonVo));
+        Person vPerson = personMapper.toEntity(pPersonVo);
+        vPerson = personRepository.save(vPerson);
+        return personMapper.toVo(vPerson);
     }
     
     /**
