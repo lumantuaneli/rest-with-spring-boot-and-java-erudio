@@ -10,16 +10,16 @@ public class MockPerson {
 
 
     public Person mockEntity() {
-        return mockEntity(0);
+        return mockEntity(0L);
     }
     
     public PersonVO mockVO() {
-        return mockVO(0);
+        return mockVO(0L);
     }
     
     public List<Person> mockEntityList() {
         List<Person> persons = new ArrayList<Person>();
-        for (int i = 0; i < 14; i++) {
+        for (long i = 0; i < 14; i++) {
             persons.add(mockEntity(i));
         }
         return persons;
@@ -27,29 +27,29 @@ public class MockPerson {
 
     public List<PersonVO> mockVOList() {
         List<PersonVO> persons = new ArrayList<>();
-        for (int i = 0; i < 14; i++) {
+        for (long i = 0; i < 14; i++) {
             persons.add(mockVO(i));
         }
         return persons;
     }
     
-    public Person mockEntity(Integer number) {
+    public Person mockEntity(Long number) {
         Person person = new Person();
-        person.setAddress("Addres Test" + number);
-        person.setFirstName("First Name Test" + number);
-        person.setGender(((number % 2)==0) ? "Male" : "Female");
         person.setId(number.longValue());
-        person.setLastName("Last Name Test" + number);
+        person.setFirstName("First Name Test #" + number);
+        person.setLastName("Last Name Test #" + number);
+        person.setGender(((number % 2)==0) ? "Male" : "Female");
+        person.setAddress("Address Test #" + number);
         return person;
     }
 
-    public PersonVO mockVO(Integer number) {
+    public PersonVO mockVO(Long number) {
         PersonVO person = new PersonVO();
-        person.setAddress("Addres Test" + number);
-        person.setFirstName("First Name Test" + number);
-        person.setGender(((number % 2)==0) ? "Male" : "Female");
         person.setPersonId(number.longValue());
-        person.setLastName("Last Name Test" + number);
+        person.setFirstName("First Name Test #" + number);
+        person.setLastName("Last Name Test #" + number);
+        person.setGender(((number % 2)==0) ? "Male" : "Female");
+        person.setAddress("Address Test #" + number);
         return person;
     }
 
