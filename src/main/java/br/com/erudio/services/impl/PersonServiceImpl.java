@@ -31,8 +31,11 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonVO> findAll() {
         logger.info("Listing all persons");
-        List<Person> vPersons = personRepository.findAll();
-        return PersonMapper.toVoList(vPersons);
+        List<Person> vPersonEntities = personRepository.findAll();
+        List<PersonVO> vPersonVos = PersonMapper.toVoList(vPersonEntities);
+        vPersonVos.stream()
+            .forEach(vPersonVo -> vPersonVo.add(linkTo(methodOn(PersonController.class).findById(vPersonVo.getPersonId())).withSelfRel()));
+        return vPersonVos;
     }
     
     /**
@@ -53,9 +56,11 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO create(PersonVO pPersonVo) {
         logger.info(String.format("Creating the person \"%s\"", pPersonVo));
-        Person vPerson = PersonMapper.toEntity(pPersonVo);
-        vPerson = personRepository.save(vPerson);
-        return PersonMapper.toVo(vPerson);
+        Person vPersonEntity = PersonMapper.toEntity(pPersonVo);
+        vPersonEntity = personRepository.save(vPersonEntity);
+        PersonVO vPersonVo = PersonMapper.toVo(vPersonEntity);
+        vPersonVo.add(linkTo(methodOn(PersonController.class).findById(vPersonVo.getPersonId())).withSelfRel());
+        return vPersonVo;
     }
     
     /**
@@ -64,14 +69,11 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO update(PersonVO pPersonVo) {
         logger.info(String.format("Updating the person \"%s\"", pPersonVo));
-        Person vPerson = findEntityById(pPersonVo.getPersonId());
-        vPerson.setFirstName(pPersonVo.getFirstName());
-        vPerson.setLastName(pPersonVo.getLastName());
-        vPerson.setAddress(pPersonVo.getAddress());
-        vPerson.setGender(pPersonVo.getGender());
-        return PersonMapper.toVo(personRepository.save(vPerson)) ;
+        PersonVO vPersonVo = strictlyUpdate(pPersonVo);
+        vPersonVo.add(linkTo(methodOn(PersonController.class).findById(vPersonVo.getPersonId())).withSelfRel());
+        return vPersonVo;
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -79,7 +81,9 @@ public class PersonServiceImpl implements PersonService {
     public PersonVO update(Long pId, PersonVO pPersonVo) {
         logger.info(String.format("Updating the person under the ID \"%s\" with the data of this person: \"%s\"", pId, pPersonVo));
         pPersonVo.setPersonId(pId);
-        return update(pPersonVo);
+        PersonVO vPersonVo = strictlyUpdate(pPersonVo);
+        vPersonVo.add(linkTo(methodOn(PersonController.class).findById(vPersonVo.getPersonId())).withSelfRel());
+        return vPersonVo;
     }
     
     /**
@@ -96,4 +100,18 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.findById(pId).orElseThrow(() -> new ResourceNotFoundException("No person found for the given ID"));
     }
     
+    /**
+     * Focus on the update trasaction, without generating any HATEOAS links
+     * @param pPersonVo
+     * @return
+     */
+    private PersonVO strictlyUpdate(PersonVO pPersonVo) {
+        Person vPersonEntity = findEntityById(pPersonVo.getPersonId());
+        vPersonEntity.setFirstName(pPersonVo.getFirstName());
+        vPersonEntity.setLastName(pPersonVo.getLastName());
+        vPersonEntity.setAddress(pPersonVo.getAddress());
+        vPersonEntity.setGender(pPersonVo.getGender());
+        return PersonMapper.toVo(personRepository.save(vPersonEntity));
+    }
+
 }
