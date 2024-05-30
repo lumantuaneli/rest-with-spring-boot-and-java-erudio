@@ -1,11 +1,15 @@
 package br.com.erudio.services.impl;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.erudio.controllers.PersonController;
 import br.com.erudio.data.vo.v1.PersonVO;
 import br.com.erudio.exceptions.ResourceNotFoundException;
 import br.com.erudio.mapper.PersonMapper;
@@ -38,7 +42,9 @@ public class PersonServiceImpl implements PersonService {
     public PersonVO findById(Long pId) {
         logger.info(String.format("Finding a person with ID \"%s\"", pId));
         Person vPerson = findEntityById(pId);
-        return PersonMapper.toVo(vPerson);
+        PersonVO vPersonVo = PersonMapper.toVo(vPerson);
+        vPersonVo.add(linkTo(methodOn(PersonController.class).findById(pId)).withSelfRel());
+        return vPersonVo;
     }
 
     /**
@@ -58,7 +64,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO update(PersonVO pPersonVo) {
         logger.info(String.format("Updating the person \"%s\"", pPersonVo));
-        Person vPerson = findEntityById(pPersonVo.getId());
+        Person vPerson = findEntityById(pPersonVo.getPersonId());
         vPerson.setFirstName(pPersonVo.getFirstName());
         vPerson.setLastName(pPersonVo.getLastName());
         vPerson.setAddress(pPersonVo.getAddress());
@@ -72,7 +78,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO update(Long pId, PersonVO pPersonVo) {
         logger.info(String.format("Updating the person under the ID \"%s\" with the data of this person: \"%s\"", pId, pPersonVo));
-        pPersonVo.setId(pId);
+        pPersonVo.setPersonId(pId);
         return update(pPersonVo);
     }
     

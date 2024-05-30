@@ -5,34 +5,34 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.hateoas.RepresentationModel;
 
-public class PersonVO implements Serializable {
+import com.github.dozermapper.core.Mapping;
+
+public class PersonVO extends RepresentationModel<PersonVO> implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    
-    private Long id;
-    
+
+    @Mapping("id")
+    private Long personId;
     private String firstName;
-    
     private String lastName;
-    
     private String address;
-    
     private String gender;
-    
+
     public PersonVO() {
         super();
     }
 
-    public Long getId() {
-        return id;
+    public Long getPersonId() {
+        return personId;
     }
 
-    public void setId(Long pId) {
-        id = pId;
+    public void setPersonId(Long pPersonpId) {
+        personId = pPersonpId;
     }
 
     public String getFirstName() {
@@ -69,22 +69,28 @@ public class PersonVO implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(address, firstName, gender, id, lastName);
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(address, firstName, gender, lastName, personId);
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (!super.equals(obj)) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         PersonVO other = (PersonVO) obj;
-        return Objects.equals(address, other.address) && Objects.equals(firstName, other.firstName) && Objects.equals(gender, other.gender) && Objects.equals(id, other.id)
-            && Objects.equals(lastName, other.lastName);
+        return Objects.equals(address, other.address) && Objects.equals(firstName, other.firstName) && Objects.equals(gender, other.gender) && Objects.equals(lastName, other.lastName)
+            && Objects.equals(personId, other.personId);
     }
-    
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
