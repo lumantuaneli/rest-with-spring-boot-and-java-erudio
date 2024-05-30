@@ -56,7 +56,7 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public PersonVO create(PersonVO pPersonVo) {
-        logger.info(String.format("Creating the person \"%s\"", pPersonVo));
+        logger.info(String.format("Inserting the person \"%s\"", pPersonVo));
         Person vPersonEntity = PersonMapper.toEntity(pPersonVo);
         vPersonEntity = personRepository.save(vPersonEntity);
         logger.info(String.format("Person entity created: %s", vPersonEntity));
@@ -71,7 +71,7 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public PersonVO update(PersonVO pPersonVo) {
-        logger.info(String.format("Updating the person \"%s\"", pPersonVo));
+        logger.info(String.format("Updating this person's data \"%s\"", pPersonVo));
         PersonVO vPersonVo = strictlyUpdate(pPersonVo);
         vPersonVo.add(linkTo(methodOn(PersonController.class).findById(vPersonVo.getPersonId())).withSelfRel());
         logger.info(String.format("Person VO updated: %s", vPersonVo));
@@ -83,7 +83,7 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public PersonVO update(Long pId, PersonVO pPersonVo) {
-        logger.info(String.format("Updating the person under the ID \"%s\" with the data of this person: \"%s\"", pId, pPersonVo));
+        logger.info(String.format("Updating the person under the ID \"%s\" with the following person data: \"%s\"", pId, pPersonVo));
         pPersonVo.setPersonId(pId);
         PersonVO vPersonVo = strictlyUpdate(pPersonVo);
         vPersonVo.add(linkTo(methodOn(PersonController.class).findById(vPersonVo.getPersonId())).withSelfRel());
