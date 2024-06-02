@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.erudio.controllers.PersonController;
 import br.com.erudio.data.vo.v1.PersonVO;
+import br.com.erudio.exceptions.RequiredObjectIsNullException;
 import br.com.erudio.exceptions.ResourceNotFoundException;
 import br.com.erudio.mapper.PersonMapper;
 import br.com.erudio.model.Person;
@@ -57,6 +58,10 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO create(PersonVO pPersonVo) {
         logger.info(String.format("Inserting the person \"%s\"", pPersonVo));
+        
+        if (pPersonVo == null) {
+            throw new RequiredObjectIsNullException();
+        }
         Person vPersonEntity = PersonMapper.toEntity(pPersonVo);
         vPersonEntity = personRepository.save(vPersonEntity);
         logger.info(String.format("Person entity created: %s", vPersonEntity));
@@ -72,6 +77,9 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO update(PersonVO pPersonVo) {
         logger.info(String.format("Updating this person's data \"%s\"", pPersonVo));
+        if (pPersonVo == null) {
+            throw new RequiredObjectIsNullException();
+        }
         PersonVO vPersonVo = strictlyUpdate(pPersonVo);
         vPersonVo.add(linkTo(methodOn(PersonController.class).findById(vPersonVo.getPersonId())).withSelfRel());
         logger.info(String.format("Person VO updated: %s", vPersonVo));
@@ -84,6 +92,9 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonVO update(Long pId, PersonVO pPersonVo) {
         logger.info(String.format("Updating the person under the ID \"%s\" with the following person data: \"%s\"", pId, pPersonVo));
+        if (pId == null || pPersonVo == null) {
+            throw new RequiredObjectIsNullException();
+        }
         pPersonVo.setPersonId(pId);
         PersonVO vPersonVo = strictlyUpdate(pPersonVo);
         vPersonVo.add(linkTo(methodOn(PersonController.class).findById(vPersonVo.getPersonId())).withSelfRel());

@@ -2,6 +2,7 @@ package br.com.erudio.unittests.mockito.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -21,6 +22,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.erudio.data.vo.v1.PersonVO;
+import br.com.erudio.exceptions.RequiredObjectIsNullException;
 import br.com.erudio.model.Person;
 import br.com.erudio.repositories.PersonRepository;
 import br.com.erudio.services.impl.PersonServiceImpl;
@@ -46,7 +48,7 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(0)
+    @Order(00)
     void testFindAll() {
         final String vExpectedLinksTemplate = "</person/v1/%s>;rel=\"self\"";
         final String vExpectedFirstNameTemplate = "First Name Test #%s";
@@ -68,7 +70,7 @@ class PersonServiceImplTest {
             String vExpectedGender = (vId % 2) == 0 ? "Male" : "Female";
             
             PersonVO vPersonVo = vPersonVos.get(i.intValue());
-            logger.info(String.format("Validating %s", vPersonVo));
+            logger.info(String.format("###Validating %s", vPersonVo));
             assertNotNull(vPersonVo);
             assertNotNull(vPersonVo.getPersonId());
             assertNotNull(vPersonVo.getLinks());
@@ -81,7 +83,7 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(1)
+    @Order(10)
     void testFindById() {
         long vId = 111L;
         String vExpectedLinks = String.format("</person/v1/%s>;rel=\"self\"", vId);
@@ -104,7 +106,7 @@ class PersonServiceImplTest {
         when(personRepository.findById(vId)).thenReturn(Optional.of(vPersonEntity));
         
         PersonVO vPersonVo = personService.findById(vId);
-        logger.info(String.format("Validating %s", vPersonVo));
+        logger.info(String.format("###Validating %s", vPersonVo));
         assertNotNull(vPersonVo);
         assertNotNull(vPersonVo.getPersonId());
         assertNotNull(vPersonVo.getLinks());
@@ -116,7 +118,7 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(2)
+    @Order(20)
     void testCreate() {
         long vId = 111L;
         String vExpectedLinks = String.format("</person/v1/%s>;rel=\"self\"", vId);
@@ -141,7 +143,7 @@ class PersonServiceImplTest {
          */
         PersonVO vRequestData = mocker.mockVO(vId, false, true);
         PersonVO vPersonVo = personService.create(vRequestData);
-        logger.info(String.format("Validating %s", vPersonVo));
+        logger.info(String.format("###Validating %s", vPersonVo));
         assertNotNull(vPersonVo);
         assertNotNull(vPersonVo.getPersonId());
         assertNotNull(vPersonVo.getLinks());
@@ -153,7 +155,17 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(3)
+    @Order(25)
+    void testCreateWithNullPerson() {
+        logger.info("###Validating creation with null PersonVO");
+        Exception vException = assertThrows(RequiredObjectIsNullException.class, 
+            () -> {
+                personService.create(null);});
+        assertTrue(RequiredObjectIsNullException.MSG_DEFAULT.equals(vException.getMessage()));
+    }
+    
+    @Test
+    @Order(30)
     void testUpdatePersonVO() {
         long vId = 111L;
         String vExpectedLinks = String.format("</person/v1/%s>;rel=\"self\"", vId);
@@ -182,7 +194,7 @@ class PersonServiceImplTest {
 
         PersonVO vRequestData = mocker.mockUpdatedVO(vId);
         PersonVO vPersonVo = personService.update(vRequestData);
-        logger.info(String.format("Validating %s", vPersonVo));
+        logger.info(String.format("###Validating %s", vPersonVo));
         assertNotNull(vPersonVo);
         assertNotNull(vPersonVo.getPersonId());
         assertNotNull(vPersonVo.getLinks());
@@ -194,7 +206,17 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(4)
+    @Order(35)
+    void testUpdateWithNullPerson() {
+        logger.info("###Validating updating with null PersonVO");
+        Exception vException = assertThrows(RequiredObjectIsNullException.class, 
+            () -> {
+                personService.update(null);});
+        assertTrue(RequiredObjectIsNullException.MSG_DEFAULT.equals(vException.getMessage()));
+    }
+    
+    @Test
+    @Order(40)
     void testUpdateLongPersonVO() {
         long vId = 100L;
         String vExpectedLinks = String.format("</person/v1/%s>;rel=\"self\"", vId);
@@ -223,7 +245,7 @@ class PersonServiceImplTest {
 
         PersonVO vRequestData = mocker.mockVO(vId, true, true);
         PersonVO vPersonVo = personService.update(vId, vRequestData);
-        logger.info(String.format("Validating %s", vPersonVo));
+        logger.info(String.format("###Validating %s", vPersonVo));
         assertNotNull(vPersonVo);
         assertNotNull(vPersonVo.getPersonId());
         assertNotNull(vPersonVo.getLinks());
@@ -235,7 +257,17 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(5)
+    @Order(35)
+    void testUpdateLongWithNullPerson() {
+        logger.info("###Validating updating with null PersonVO");
+        Exception vException = assertThrows(RequiredObjectIsNullException.class, 
+            () -> {
+                personService.update(null, mocker.mockUpdatedVO(155L));});
+        assertTrue(RequiredObjectIsNullException.MSG_DEFAULT.equals(vException.getMessage()));
+    }
+    
+    @Test
+    @Order(50)
     void testDelete() {
         long vId = 15L;
         
