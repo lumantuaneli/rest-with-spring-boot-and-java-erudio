@@ -9,6 +9,9 @@ import br.com.erudio.model.Person;
 public class MockPerson {
 
 
+    public static final int MOCK_LIST_FIRST_ID = 500;
+    public static final int MOCK_LIST_COUNT = 14;
+
     public Person mockEntity() {
         return mockEntity(0L);
     }
@@ -19,7 +22,7 @@ public class MockPerson {
     
     public List<Person> mockEntityList() {
         List<Person> persons = new ArrayList<Person>();
-        for (long i = 500; i < 514; i++) {
+        for (long i = MOCK_LIST_FIRST_ID; i < MOCK_LIST_FIRST_ID + MOCK_LIST_COUNT; i++) {
             persons.add(mockEntity(i));
         }
         return persons;

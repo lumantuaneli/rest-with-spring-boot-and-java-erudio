@@ -8,10 +8,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -41,14 +43,21 @@ class PersonServiceImplTest {
     @Mock
     PersonRepository personRepository;
     
-    @BeforeEach
+    @BeforeAll
     void setUp() throws Exception {
+        logger.setLevel(Level.FINE);
+        ConsoleHandler vHandler = new ConsoleHandler();
+        vHandler.setLevel(Level.FINE);
+        logger.addHandler(vHandler);
+    }
+
+    @BeforeEach
+    void setUpForTest() throws Exception {
         mocker = new MockPerson();
         MockitoAnnotations.openMocks(this);
     }
-
+    
     @Test
-    @Order(00)
     void testFindAll() {
         final String vExpectedLinksTemplate = "</person/v1/%s>;rel=\"self\"";
         final String vExpectedFirstNameTemplate = "First Name Test #%s";
@@ -60,6 +69,7 @@ class PersonServiceImplTest {
         when(personRepository.findAll()).thenReturn(vPreExistingEntityPersons);
         
         List<PersonVO> vPersonVos = personService.findAll();
+        logger.fine("###Validating findAll operation");
         assertNotNull(vPersonVos);
         assertEquals(14, vPersonVos.size());
         for (Long i = 0L, vId = 500L; i < 14L; i++, vId++) {
@@ -70,7 +80,7 @@ class PersonServiceImplTest {
             String vExpectedGender = (vId % 2) == 0 ? "Male" : "Female";
             
             PersonVO vPersonVo = vPersonVos.get(i.intValue());
-            logger.info(String.format("###Validating %s", vPersonVo));
+            logger.fine(String.format("...Validating %s", vPersonVo));
             assertNotNull(vPersonVo);
             assertNotNull(vPersonVo.getPersonId());
             assertNotNull(vPersonVo.getLinks());
@@ -83,7 +93,6 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(10)
     void testFindById() {
         long vId = 111L;
         String vExpectedLinks = String.format("</person/v1/%s>;rel=\"self\"", vId);
@@ -106,7 +115,7 @@ class PersonServiceImplTest {
         when(personRepository.findById(vId)).thenReturn(Optional.of(vPersonEntity));
         
         PersonVO vPersonVo = personService.findById(vId);
-        logger.info(String.format("###Validating %s", vPersonVo));
+        logger.fine(String.format("###Validating findById operation: %s", vPersonVo));
         assertNotNull(vPersonVo);
         assertNotNull(vPersonVo.getPersonId());
         assertNotNull(vPersonVo.getLinks());
@@ -118,7 +127,6 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(20)
     void testCreate() {
         long vId = 111L;
         String vExpectedLinks = String.format("</person/v1/%s>;rel=\"self\"", vId);
@@ -143,7 +151,7 @@ class PersonServiceImplTest {
          */
         PersonVO vRequestData = mocker.mockVO(vId, false, true);
         PersonVO vPersonVo = personService.create(vRequestData);
-        logger.info(String.format("###Validating %s", vPersonVo));
+        logger.fine(String.format("###Validating create operation: %s", vPersonVo));
         assertNotNull(vPersonVo);
         assertNotNull(vPersonVo.getPersonId());
         assertNotNull(vPersonVo.getLinks());
@@ -155,9 +163,8 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(25)
     void testCreateWithNullPerson() {
-        logger.info("###Validating creation with null PersonVO");
+        logger.fine("###Validating creation with null PersonVO");
         Exception vException = assertThrows(RequiredObjectIsNullException.class, 
             () -> {
                 personService.create(null);});
@@ -165,7 +172,6 @@ class PersonServiceImplTest {
     }
     
     @Test
-    @Order(30)
     void testUpdatePersonVO() {
         long vId = 111L;
         String vExpectedLinks = String.format("</person/v1/%s>;rel=\"self\"", vId);
@@ -194,7 +200,7 @@ class PersonServiceImplTest {
 
         PersonVO vRequestData = mocker.mockUpdatedVO(vId);
         PersonVO vPersonVo = personService.update(vRequestData);
-        logger.info(String.format("###Validating %s", vPersonVo));
+        logger.fine(String.format("###Validating update operation: %s", vPersonVo));
         assertNotNull(vPersonVo);
         assertNotNull(vPersonVo.getPersonId());
         assertNotNull(vPersonVo.getLinks());
@@ -206,9 +212,8 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(35)
     void testUpdateWithNullPerson() {
-        logger.info("###Validating updating with null PersonVO");
+        logger.fine("###Validating updating with null PersonVO");
         Exception vException = assertThrows(RequiredObjectIsNullException.class, 
             () -> {
                 personService.update(null);});
@@ -216,7 +221,6 @@ class PersonServiceImplTest {
     }
     
     @Test
-    @Order(40)
     void testUpdateLongPersonVO() {
         long vId = 100L;
         String vExpectedLinks = String.format("</person/v1/%s>;rel=\"self\"", vId);
@@ -245,7 +249,7 @@ class PersonServiceImplTest {
 
         PersonVO vRequestData = mocker.mockVO(vId, true, true);
         PersonVO vPersonVo = personService.update(vId, vRequestData);
-        logger.info(String.format("###Validating %s", vPersonVo));
+        logger.fine(String.format("###Validating update (by ID) operation: %s", vPersonVo));
         assertNotNull(vPersonVo);
         assertNotNull(vPersonVo.getPersonId());
         assertNotNull(vPersonVo.getLinks());
@@ -257,9 +261,8 @@ class PersonServiceImplTest {
     }
 
     @Test
-    @Order(35)
     void testUpdateLongWithNullPerson() {
-        logger.info("###Validating updating with null PersonVO");
+        logger.fine("###Validating updating (By ID) with null PersonVO");
         Exception vException = assertThrows(RequiredObjectIsNullException.class, 
             () -> {
                 personService.update(null, mocker.mockUpdatedVO(155L));});
@@ -267,7 +270,6 @@ class PersonServiceImplTest {
     }
     
     @Test
-    @Order(50)
     void testDelete() {
         long vId = 15L;
         
@@ -278,6 +280,7 @@ class PersonServiceImplTest {
 
         when(personRepository.findById(vId)).thenReturn(Optional.of(vPreExistingPersonEntity));
         
+        logger.fine(String.format("###Validating delete operation: %s", vPreExistingPersonEntity));
         personService.delete(vId);
     }
 
